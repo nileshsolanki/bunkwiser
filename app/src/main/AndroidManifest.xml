@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TimeTableActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".AnalysisActivity" android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

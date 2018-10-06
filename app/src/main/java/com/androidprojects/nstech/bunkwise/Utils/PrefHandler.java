@@ -11,6 +11,7 @@ public class PrefHandler {
     final static  String ONDAY = "onday";
     final static  String TIMETABLE = "timetable";
     final static  String STATE = "state";
+    final static  String PARAMS = "params";
     public final static int ATTEND = 1;
     public final static int BUNK = 2;
     public final static int CANCEL = 3;
@@ -112,6 +113,18 @@ public class PrefHandler {
 
     }
 
+    public static void putParams(int date){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PARAMS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt("date", date);
+        editor.apply();
+    }
+
+    public static int getParams(String key){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PARAMS, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(key, 0);
+    }
 
 
 }

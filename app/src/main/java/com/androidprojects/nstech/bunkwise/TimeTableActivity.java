@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -184,13 +185,14 @@ public class TimeTableActivity extends AppCompatActivity {
     int cx = (int)fab.getX() + fab.getWidth() / 2;
     int cy = (int)fab.getY() + fab.getHeight() / 2;
 
-    int finalRadius = (int) Math.hypot(view.getWidth()/2, view.getHeight()/2);
+    int finalRadius = (int) Math.hypot(view.getWidth(), view.getHeight());
 
     Animator anim = ViewAnimationUtils.createCircularReveal(layout, cx, cy, 0, finalRadius);
 
     layout.setVisibility(View.VISIBLE);
 
     fab.setImageResource(R.drawable.ic_done);
+    anim.setDuration(500);
     anim.start();
 
 
@@ -208,7 +210,7 @@ public class TimeTableActivity extends AppCompatActivity {
 
             DisplayMetrics metrics = getResources().getDisplayMetrics();
             int px_padding = (int)16*(metrics.densityDpi / metrics.DENSITY_DEFAULT);
-            int px_textSize = (int)32*(metrics.densityDpi / metrics.DENSITY_DEFAULT);
+            int px_textSize = (int)10*(metrics.densityDpi / metrics.DENSITY_DEFAULT);
 
             CheckBox checkBox = new CheckBox(TimeTableActivity.this);
             checkBox.setPadding(px_padding,px_padding,px_padding,px_padding);
@@ -217,7 +219,7 @@ public class TimeTableActivity extends AppCompatActivity {
             TextView textView = new TextView(TimeTableActivity.this);
             textView.setId(i+1);
             textView.setPadding(px_padding,px_padding,px_padding,px_padding);
-            textView.setTextSize(0, px_textSize);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, px_textSize);
             textView.setText((String)subjects[j]);
 
             subjectOptionsGrid.addView(checkBox, i);

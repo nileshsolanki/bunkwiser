@@ -95,7 +95,7 @@ public class SubjectsActivity extends AppCompatActivity {
         int count = adapter.getCount();
         Set<String> subjectSet = new HashSet<>();
         for(int i = 0 ; i < count; i++){
-            subjectSet.add((String) adapter.getItem(i));
+            subjectSet.add((String) adapter.getItem(i).toString().replace(" ", "_"));
         }
         PrefHandler pf = new PrefHandler(SubjectsActivity.this);
         pf.addSubjects(subjectSet);

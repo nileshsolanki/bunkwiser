@@ -1,15 +1,19 @@
 package com.androidprojects.nstech.bunkwise.adapters;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidprojects.nstech.bunkwise.R;
+import com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper;
 import com.androidprojects.nstech.bunkwise.Utils.PrefHandler;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
@@ -31,6 +35,7 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
     public ClassesListAdapter(Context context, Object[] subjectsList){
         this.context = context;
         this.subjectsList = subjectsList;
+
     }
 
     @Override
@@ -64,12 +69,37 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
             percent = 100;
         }
         percentage.setText((int)percent+"");
+        FrameLayout fl = (FrameLayout) percentage.getParent();
+        if(percent < 75){
+            fl.setBackground(context.getDrawable(R.drawable.bg_card_red));
+        }
+        else{
+            fl.setBackground(context.getDrawable(R.drawable.bg_card_normal));
+        }
 
+        int bunks = getFreeBunks(stats[0], stats[2], 75);
+        if(bunks < 0){
+            advice.setText("You can bunk "+ -1*bunks + " classes");
+        }
+        else if(bunks > 0){
+            advice.setText("You need to attend "+ bunks +" classes");
+        }
+        else{
+            advice.setText("You Rock!");
+        }
+
+    }
+
+    private int getFreeBunks(int attended, int total,int required) {
+
+        double need = (required / 100.0 *total - attended)/(1 - required/100.00);
+        return (int) Math.floor(need);
     }
 
     private void attachListeners(final View convertView, final int position, final PrefHandler prefHandler) {
         final String subName = (String) subjectsList[position];
-        final int state = getState(subName);
+        final int state = prefHandler.getState(subName);
+
         CardView attend = convertView.findViewById(R.id.btn_attend);
         CardView bunked = convertView.findViewById(R.id.btn_bunked);
         CardView cancelled = convertView.findViewById(R.id.btn_cancelled);
@@ -78,7 +108,7 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
         attend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Clicked attend for "+subjectsList[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,subjectsList[position] + " Attended", Toast.LENGTH_SHORT).show();
                 if(state == BUNK){
                     changeSubjectStats(subName, new int[]{1, -1, 0});
                 }else if(state == CANCEL || state == 0){
@@ -95,7 +125,7 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
         bunked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Clicked bunked for "+subjectsList[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, subjectsList[position] + " Bunked", Toast.LENGTH_SHORT).show();
                 if(state == ATTEND){
                     changeSubjectStats(subName, new int[]{-1, 1, 0});
                 }
@@ -112,8 +142,7 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
         cancelled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Clicked cancel for "+subjectsList[position], Toast.LENGTH_SHORT).show();
-                //prefHandler.changeSubjectStats(subName, new int[]{0, 0, 0});
+                Toast.makeText(context, subjectsList[position] + " Cancelled", Toast.LENGTH_SHORT).show();
                 if(state == ATTEND){
                     changeSubjectStats(subName, new int[]{-1, 0, -1});
                 }

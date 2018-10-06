@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/main">
+
+        <item android:id="@+id/profile"
+            android:title="PROFILE"
+            android:icon="@drawable/profile"/>
+
+        <item android:id="@+id/analysis"
+            android:title="ANALYSIS"
+            android:icon="@drawable/analysis"/>
+
+        <item android:id="@+id/predict"
+            android:title="PREDICT"
+            android:icon="@drawable/predict"/>
+
+
+    </group>
+    <group android:id="@+id/support">
+
+        <item android:id="@+id/share"
+            android:title="SHARE"
+            android:icon="@drawable/share"/>
+
+        <item android:id="@+id/rate"
+            android:title="RATE"
+            android:icon="@drawable/rate"/>
+
+    </group>
+</menu>
