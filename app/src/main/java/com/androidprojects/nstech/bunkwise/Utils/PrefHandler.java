@@ -3,6 +3,8 @@ package com.androidprojects.nstech.bunkwise.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PrefHandler {
@@ -36,7 +38,19 @@ public class PrefHandler {
     public static Set<String> getSubjects(){
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(SUBJECTS, Context.MODE_PRIVATE);
-        return sharedPreferences.getStringSet(SUBJECTS, null);
+        Set<String> subjectSet = sharedPreferences.getStringSet(SUBJECTS, null);
+        Set<String> newSubSet = new HashSet<>();
+
+        if(subjectSet != null) {
+            for (String sub : subjectSet) {
+
+                newSubSet.add(sub.replace("_", " "));
+
+            }
+            return newSubSet;
+        }
+
+        return subjectSet;
 
     }
 
@@ -50,15 +64,25 @@ public class PrefHandler {
 
     }
 
-    public static  Set<String> getSubjectsFor(String day){
+    public static ArrayList<String> getSubjectsFor(String day){
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(ONDAY, Context.MODE_PRIVATE);
-        return sharedPreferences.getStringSet(day, null);
+        Set<String> subjectSet =  sharedPreferences.getStringSet(day, null);
+        ArrayList<String> subjects = new ArrayList<>();
+        if(subjectSet != null) {
+            for (String s : subjectSet) {
+                String sub = s;
+                subjects.add(sub.replace("_", " "));
+            }
+        }
+
+        return  subjects;
 
     }
 
     public static void changeSubjectStats(String subName, int [] del_values){
 
+        subName = subName.replace(" ","_");
         SharedPreferences sharedPreferences = context.getSharedPreferences(TIMETABLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -81,6 +105,7 @@ public class PrefHandler {
         int [] stats = new int[3];
         SharedPreferences sharedPreferences = context.getSharedPreferences(TIMETABLE, Context.MODE_PRIVATE);
 
+        subName = subName.replace(" ", "_");
         stats[0] = sharedPreferences.getInt(subName+"_attend", 0);
         stats[1] = sharedPreferences.getInt(subName+"_bunked", 0);
         stats[2] = sharedPreferences.getInt(subName+"_total", 0);
@@ -109,7 +134,7 @@ public class PrefHandler {
 
     public static int getState(String subName){
         SharedPreferences sharedPreferences = context.getSharedPreferences(STATE, Context.MODE_PRIVATE);
-        return  sharedPreferences.getInt(subName, 0);
+        return  sharedPreferences.getInt(subName.replace(" ","_"), 0);
 
     }
 
@@ -121,10 +146,29 @@ public class PrefHandler {
         editor.apply();
     }
 
+    public static void putParams(int gender, float target, String name){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PARAMS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt("gender", gender);
+        editor.putString("userName", name);
+        editor.putFloat("target", target);
+        editor.apply();
+    }
+
     public static int getParams(String key){
         SharedPreferences sharedPreferences = context.getSharedPreferences(PARAMS, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(key, 0);
     }
 
+    public static float getPercentage(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PARAMS, Context.MODE_PRIVATE);
+        return sharedPreferences.getFloat("target", 0);
+    }
+
+    public static String getParamsUserName(String key){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PARAMS, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(key, null);
+    }
 
 }

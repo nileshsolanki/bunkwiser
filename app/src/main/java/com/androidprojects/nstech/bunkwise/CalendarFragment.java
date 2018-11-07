@@ -18,9 +18,7 @@ import com.androidprojects.nstech.bunkwise.Objects.CalendarSubject;
 import com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper;
 import com.androidprojects.nstech.bunkwise.adapters.CalendarListAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.COLUMNS;
 import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.COL_DATE;
@@ -52,6 +50,7 @@ public class CalendarFragment extends Fragment{
 
         v = inflater.inflate(R.layout.fragment_calendar, container, false);
         final ListView subjectStateList = v.findViewById(R.id.lv_calendar_frag);
+
         final CalendarView cv = v.findViewById(R.id.calendar_view);
         cv.setMaxDate(cv.getDate() - 1*24*60*60*1000);
 
@@ -59,6 +58,9 @@ public class CalendarFragment extends Fragment{
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
 //                int dbDate = Integer.parseInt(year + "" + month + "" + day);
+                if (adapter != null){
+                    adapter.clear();
+                }
                 String dbDate = getFormattedDate(year, month, day);
                 Log.i("CalendarFrag", "onSelectedDayChange: date"+ dbDate);
                 calendarSubjects = new ArrayList<>();
@@ -69,13 +71,14 @@ public class CalendarFragment extends Fragment{
 
                     cursor.moveToFirst();
                     for (String subName : COLUMNS) {
-                        calendarSubjects.add(new CalendarSubject(subName, cursor.getInt(cursor.getColumnIndex(subName))));
+                        calendarSubjects.add(new CalendarSubject(subName.replace("_"," "), cursor.getInt(cursor.getColumnIndex(subName))));
                     }
                     cursor.close();
 
 
                     adapter = new CalendarListAdapter(getContext(), calendarSubjects);
                     subjectStateList.setAdapter(adapter);
+                    subjectStateList.setEmptyView(v.findViewById(R.id.emptyElement));
 
                 }
                 else{

@@ -1,10 +1,7 @@
 package com.androidprojects.nstech.bunkwise.adapters;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidprojects.nstech.bunkwise.R;
-import com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper;
 import com.androidprojects.nstech.bunkwise.Utils.PrefHandler;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
-import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
 import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.ATTEND;
 import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.BUNK;
 import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.CANCEL;
 import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.changeSubjectStats;
-import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.getState;
 import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.getSubjectStats;
 import static com.androidprojects.nstech.bunkwise.Utils.PrefHandler.setState;
 
@@ -70,14 +62,14 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
         }
         percentage.setText((int)percent+"");
         FrameLayout fl = (FrameLayout) percentage.getParent();
-        if(percent < 75){
+        if(percent < prefHandler.getPercentage()*100){
             fl.setBackground(context.getDrawable(R.drawable.bg_card_red));
         }
         else{
             fl.setBackground(context.getDrawable(R.drawable.bg_card_normal));
         }
 
-        int bunks = getFreeBunks(stats[0], stats[2], 75);
+        int bunks = getFreeBunks(stats[0], stats[2], (prefHandler.getPercentage()*100));
         if(bunks < 0){
             advice.setText("You can bunk "+ -1*bunks + " classes");
         }
@@ -90,14 +82,15 @@ public class ClassesListAdapter extends BaseSwipeAdapter {
 
     }
 
-    private int getFreeBunks(int attended, int total,int required) {
+
+    private int getFreeBunks(int attended, int total,float required) {
 
         double need = (required / 100.0 *total - attended)/(1 - required/100.00);
         return (int) Math.floor(need);
     }
 
     private void attachListeners(final View convertView, final int position, final PrefHandler prefHandler) {
-        final String subName = (String) subjectsList[position];
+        final String subName = ((String) subjectsList[position]).replace(" ", "_");
         final int state = prefHandler.getState(subName);
 
         CardView attend = convertView.findViewById(R.id.btn_attend);

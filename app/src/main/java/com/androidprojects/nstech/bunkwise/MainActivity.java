@@ -4,17 +4,17 @@ import android.animation.Animator;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.CheckBox;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,12 +34,8 @@ import com.androidprojects.nstech.bunkwise.adapters.ClassesListAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.COL_DATE;
 import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.TABLE_NAME;
@@ -67,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     int navActivityId = 0;
     DrawerLayout drawerLayout;
     NavigationView navView;
+    ImageView drawerPic;
+    TextView drawerName;
 
 
     @Override
@@ -109,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
+
+
         addDrawerListener(drawerLayout);
         navView = findViewById(R.id.nav_view);
         setNavigationItemListener(navView);
@@ -127,22 +128,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Set<String> subSet = new PrefHandler(this).getSubjectsFor(day.substring(0,3).toLowerCase());
-        if(subSet != null){
-
-            subjects.addAll(subSet);
-            adapter = new ClassesListAdapter(MainActivity.this, subjects.toArray());
-            dailyClassesList.setAdapter(adapter);
-
-        }else{
-
-            //TODO display some graphic
-//            dailyClassesList.setEmptyView();
-        }
+        fillListwithSubjects();
 
 
 
-        //TODO: clear state when date changes
+        //TODO: clear state when date changes DONE
         PrefHandler pf = new PrefHandler(this);
         int date = pf.getParams("date");
         if(dbDate != date){
@@ -153,6 +143,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void fillListwithSubjects() {
+
+        ArrayList<String> subSet = new PrefHandler(this).getSubjectsFor(day.substring(0,3).toLowerCase());
+
+        PrefHandler pf =  new PrefHandler(this);
+        for(String sub : pf.getSubjects()){
+
+            if(!subSet.contains(sub) && pf.getState(sub) != 0){
+
+                subSet.add(sub.replace("_", " "));
+            }
+        }
+        subjects.addAll(subSet);
+        adapter = new ClassesListAdapter(MainActivity.this, subjects.toArray());
+        dailyClassesList.setAdapter(adapter);
+        dailyClassesList.setEmptyView(this.findViewById(R.id.emptyElement));
+
+
+    }
+
+    private void setPicAndName() {
+
+        PrefHandler pf = new PrefHandler(this);
+        int gender = pf.getParams("gender");
+        String name = pf.getParamsUserName("userName");
+
+        if(gender == 1){
+            drawerPic.setImageResource(R.drawable.boy);
+        }
+        else if(gender == 2){
+            drawerPic.setImageResource(R.drawable.girl);
+        }
+
+        drawerName.setText(name);
+
+    }
+
     private void addDrawerListener(DrawerLayout drawerLayout) {
 
 
@@ -160,10 +187,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
 
+                drawerName = view.findViewById(R.id.tv_drawer_name);
+                drawerPic = view.findViewById(R.id.iv_drawer);
+                setPicAndName();
             }
 
             @Override
             public void onDrawerOpened(@NonNull View view) {
+
+
 
             }
 
@@ -174,6 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.analysis:
                         startActivity(new Intent(MainActivity.this, AnalysisActivity.class));
+                        break;
+
+                    case R.id.profile:
+                        Intent i = new Intent(MainActivity.this, SetupActivity.class);
+                        i.setData(Uri.parse("stay"));
+                        startActivity(i);
+                        break;
                 }
 
             }
@@ -189,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void setNavigationItemListener(NavigationView navView) {
+    private void setNavigationItemListener(final NavigationView navView) {
 
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -199,6 +238,10 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
 
                 switch (menuItem.getItemId()){
+
+                    case R.id.profile:
+                        navActivityId = R.id.profile;
+                        break;
 
                     case R.id.analysis:
 //                        startActivity(new Intent(MainActivity.this, AnalysisActivity.class));
@@ -312,6 +355,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 adapter = new ClassesListAdapter(MainActivity.this, subjects.toArray());
                 dailyClassesList.setAdapter(adapter);
+                dailyClassesList.setEmptyView(MainActivity.this.findViewById(R.id.emptyElement));
                 layout.setVisibility(View.GONE);
 
             }

@@ -23,6 +23,35 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
+    <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/emptyElement"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:src="@drawable/wise_owl_reading"
+            android:alpha="0.5"
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:gravity="center_horizontal"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Use '+' button to add all subjects in your curriculum"/>
+
+
+    </LinearLayout>
+
 
 
     <android.support.design.widget.FloatingActionButton

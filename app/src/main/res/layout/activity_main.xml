@@ -62,10 +62,21 @@
             </android.support.design.widget.AppBarLayout>
 
             <ListView
+                android:nestedScrollingEnabled="true"
                 android:id="@+id/lv_daily_tt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+           <ImageView
+               android:alpha="0.5"
+               android:layout_gravity="center"
+               android:id="@+id/emptyElement"
+               android:layout_width="200dp"
+               android:layout_height="200dp"
+               android:scaleType="fitCenter"
+               android:src="@drawable/wise_owl_asleep"/>
+
             <android.support.design.widget.FloatingActionButton
                 app:elevation="32dp"
                 android:id="@+id/fab_add_subs_main_activity"
@@ -90,7 +101,19 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu" />
+        app:menu="@menu/drawer_menu">
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:background="@color/offwhite"
+            android:text=""
+            android:textColor="@color/white"/>
+
+    </android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

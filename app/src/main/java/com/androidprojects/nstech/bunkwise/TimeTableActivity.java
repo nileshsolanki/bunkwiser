@@ -3,13 +3,13 @@ package com.androidprojects.nstech.bunkwise;
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -18,16 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.GridLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.androidprojects.nstech.bunkwise.Utils.PrefHandler;
 import com.androidprojects.nstech.bunkwise.adapters.FragmentAdapter;
 
-import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,8 +61,8 @@ public class TimeTableActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(new PrefHandler(this).getSubjectsFor(DOW[1]) != null){
-
+        if(!new PrefHandler(this).getSubjectsFor(DOW[1]).isEmpty()){
+            //TODO : not robust enough
             startActivity(new Intent(this, MainActivity.class));
             finish();
 
@@ -77,7 +74,8 @@ public class TimeTableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
 
-        setWindowParams();
+//        setWindowParams();
+        //TODO : disabled window params
 
 
         toolbar = findViewById(R.id.toolbar);

@@ -1,32 +1,22 @@
 package com.androidprojects.nstech.bunkwise;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper;
 import com.androidprojects.nstech.bunkwise.Utils.PrefHandler;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.COLUMNS;
-import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.TABLE_NAME;
 
 
 public class GraphFragment extends Fragment {
@@ -50,6 +40,7 @@ public class GraphFragment extends Fragment {
         graph.setTitle("Attendance Record");
         graph.getGridLabelRenderer().setNumHorizontalLabels(COLUMNS.length);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(true);
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
 
 //        setZoomableGraph(graph);
 
@@ -80,7 +71,11 @@ public class GraphFragment extends Fragment {
             public String formatLabel(double value, boolean isValueX) {
 
                 if(isValueX && value <= COLUMNS.length){
-                    return COLUMNS[(int)(value) - 1];
+                    String label = COLUMNS[(int) value - 1];
+                    if(label.length() > 12){
+                        label = label.substring(0, 12);
+                    }
+                    return label.replace("_"," ");
                 }
                 return super.formatLabel(value, isValueX);
             }
@@ -101,14 +96,6 @@ public class GraphFragment extends Fragment {
 
         addSeriesToGraph();
         graph.animate();
-
-        // styling
-//        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
-//            @Override
-//            public int get(DataPoint data) {
-//                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
-//            }
-//        });
 
         // draw values on top
         series.setDrawValuesOnTop(true);

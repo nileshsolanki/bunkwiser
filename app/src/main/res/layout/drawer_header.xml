@@ -52,6 +52,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:paddingTop="16dp"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
             android:background="@drawable/bg_card_normal"
             android:layout_gravity="center"
             android:src="@drawable/boy"

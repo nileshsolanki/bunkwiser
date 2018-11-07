@@ -9,6 +9,7 @@
     android:layout_height="200dp">
 
     <EditText
+        android:focusedByDefault="true"
         android:elevation="4dp"
         android:background="@drawable/et_bg"
         android:id="@+id/et_sub_name"
@@ -22,7 +23,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/btn_add_sub"

@@ -2,12 +2,9 @@ package com.androidprojects.nstech.bunkwise.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +13,9 @@ import android.widget.TextView;
 
 import com.androidprojects.nstech.bunkwise.Objects.CalendarSubject;
 import com.androidprojects.nstech.bunkwise.R;
-import com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.COLUMNS;
-import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.COL_DATE;
-import static com.androidprojects.nstech.bunkwise.Utils.DatesReaderDbHelper.TABLE_NAME;
 
 public class CalendarListAdapter extends ArrayAdapter<CalendarSubject>{
 
@@ -50,7 +42,7 @@ public class CalendarListAdapter extends ArrayAdapter<CalendarSubject>{
 
         CardView colorDot = v.findViewById(R.id.view_color);
         int state = calendarSubjects.get(position).getState();
-        if(state == 1){ colorDot.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimary))); }
+        if(state == 1){ colorDot.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent))); }
         else if(state == 2){ colorDot.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red))); }
         else {colorDot.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimary))); }
 

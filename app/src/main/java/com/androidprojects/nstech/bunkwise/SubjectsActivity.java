@@ -1,10 +1,9 @@
 package com.androidprojects.nstech.bunkwise;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import android.widget.ListView;
 
 import com.androidprojects.nstech.bunkwise.Utils.PrefHandler;
 
-import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,6 +66,7 @@ public class SubjectsActivity extends AppCompatActivity {
         subjectsList = findViewById(R.id.lv_subjects_added);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         subjectsList.setAdapter(adapter);
+        subjectsList.setEmptyView(this.findViewById(R.id.emptyElement));
         fab_add = findViewById(R.id.fab_add_subs);
 
 
